@@ -45,3 +45,24 @@ function esign_field_schema($field) {
     'indexes' => $indexes,
   );
 }
+
+/**
+ * Impletemt hook_uninstall().
+ *
+ * Remove fields and their data.
+ */
+function esign_uninstall() {
+  // List of fields created by the module
+  $fields_to_remove = ['esignature', 'signer_name', 'signer_title', 'created'];
+
+  // Remove field instances and definitions
+  foreach ($fields_to_remove as $field_name) {
+    if (field_info_field($field_name)) {
+      field_delete_instance(['field_name' => $field_name]);
+      field_delete_field($field_name);
+    }
+  }
+
+  // Clear cache to ensure clean removal
+  backdrop_flush_all_caches();
+}

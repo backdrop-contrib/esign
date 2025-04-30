@@ -22,7 +22,7 @@ script, into Backdrop CMS for both nodes (content) and the Field API (FAPI).
 
 It requires the following third-party library:
 
- * Signature Pad 1.6+ (https://github.com/szimek/signature_pad) Loaded via CDN
+ * Signature Pad 1.6+ https://github.com/szimek/signature_pad Loaded via CDN
 
 
 # RECOMMENDED MODULES
@@ -68,13 +68,13 @@ Q: The signature field isn't working!
 A: Please make sure you're using the correct version of Signature Pad.
 
 # Current Maintainer(s):
-- [Steve Moorhouse (albanycomputers)] (https://github.com/albanycomputers)
+- Steve Moorhouse (albanycomputers) https://github.com/albanycomputers
 - Seeking additional maintainers and contributors.
 
 ## Sponsorship:
-- [Albany Computer Services] (https://www.albany-computers.co.uk)
-- [Albany Web Design] (https://www.albanywebdesign.co.uk)
-- [Albany Hosting] (https://www.albany-hosting.co.uk)
+- Albany Computer Services - https://www.albany-computers.co.uk
+- Albany Web Design - https://www.albanywebdesign.co.uk
+- Albany Hosting - https://www.albany-hosting.co.uk
 
 ## License
 This project is GPL v2 software. See the LICENSE.txt file in this directory for complete text.

@@ -284,8 +284,6 @@ function esign_signature_form_base($langcode, $items, $delta, $element, $setting
   }
 
   // Load the signature pad JS from CDN.
-  // 2025-04-30 - <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-  // original - backdrop_add_js('https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js');
   backdrop_add_js('https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js');
   backdrop_add_js(backdrop_get_path('module', 'esign') . '/js/esign.js');
 
