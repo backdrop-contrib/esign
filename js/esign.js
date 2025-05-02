@@ -20,47 +20,48 @@
   function activateEsign() {
     $('.esign_container').each(function () {
       var thisContainer = $(this);
-      var settings = JSON.parse($(this).attr('data-settings'));
-      var signatureCapture;
-      var canvas;
-      var signaturePad;
+      var settings = JSON.parse(thisContainer.attr('data-settings'));
+      var signatureCapture = thisContainer.find('.signature-storage');
+      var canvas = thisContainer.find('canvas')[0];
 
-      // Assign the hidden field (that saves the signature) to a variable.
-      signatureCapture = thisContainer.find('.signature-storage');
+      // Ensure high-DPI canvas resizing
+      function resizeCanvas() {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext('2d').scale(ratio, ratio);
+      }
 
-      // Set the canvas to a variable.
-      canvas = thisContainer.find('canvas')[0];
+      // Initialize Signature Pad
+      var signaturePad = new SignaturePad(canvas, settings);
 
-      // Instantiate the signaturepad itself.
-      settings.onEnd = function () {
-        // When a signature is done being signed, set the hidden field to contain the data.
-        signatureCapture.val(signaturePad.toDataURL(settings.toDataURL));
-
-        // Also set the data-signature value.
-        thisContainer.find('.esign_panel').attr("data-signature", signaturePad.toDataURL(settings.toDataURL));
+      // Hook into new 4.x event system
+      signaturePad.addEventListener("endStroke", function () {
+        signatureCapture.val(signaturePad.toDataURL(settings.toDataURL || 'image/png'));
+        thisContainer.find('.esign_panel').attr("data-signature", signaturePad.toDataURL(settings.toDataURL || 'image/png'));
         thisContainer.find('.signature-created').val(Math.ceil(Date.now() / 1000));
-      };
-      signaturePad = new SignaturePad(canvas, settings);
+      });
 
-      // Add the "clear" button.
+      // Add the "clear" button if not already added
       thisContainer.find('.esign_panel .clear-container').remove();
-      thisContainer.find('.esign_panel').append('<div class="clear-container"><br/><a href="#" class="clear">' + Backdrop.t('Clear Signature') + '</a></div>');
+      thisContainer.find('.esign_panel').append(
+        '<div class="clear-container"><br/><a href="#" class="clear">' + Backdrop.t('Clear Signature') + '</a></div>'
+      );
 
-      // Make the clear button work.
+      // Clear button logic
       thisContainer.find('.esign_panel .clear').click(function (e) {
         e.preventDefault();
-        javascript:signaturePad.clear();
+        signaturePad.clear();
         signatureCapture.val("");
         thisContainer.find('.esign_panel').attr('data-signature', '');
-        resizeCanvas(canvas, signaturePad, signatureCapture, settings);
+        resizeCanvas(); // Re-resize after clearing
       });
 
-      // Call the "resize" function for high-DPI screens.
-      resizeCanvas(canvas, signaturePad, signatureCapture, settings);
+      // Initial canvas resize
+      resizeCanvas();
 
-      $(window).on('orientationchange', function () {
-        resizeCanvas(canvas, signaturePad, signatureCapture, settings);
-      });
+      // Re-resize on orientation change
+      $(window).on('orientationchange', resizeCanvas);
     });
   }
 
