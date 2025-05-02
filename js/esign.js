@@ -20,49 +20,60 @@
   function activateEsign() {
     $('.esign_container').each(function () {
       var thisContainer = $(this);
-      var settings = JSON.parse($(this).attr('data-settings'));
-      var signatureCapture;
-      var canvas;
-      var signaturePad;
+      var settings = JSON.parse(thisContainer.attr('data-settings'));
+      var signatureCapture = thisContainer.find('.signature-storage');
+      var canvas = thisContainer.find('canvas')[0];
 
-      // Assign the hidden field (that saves the signature) to a variable.
-      signatureCapture = thisContainer.find('.signature-storage');
+      function resizeCanvas() {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext('2d').scale(ratio, ratio);
+      }
 
-      // Set the canvas to a variable.
-      canvas = thisContainer.find('canvas')[0];
+      // Initialize SignaturePad
+      var signaturePad = new SignaturePad(canvas, settings);
 
-      // Instantiate the signaturepad itself.
-      settings.onEnd = function () {
-        // When a signature is done being signed, set the hidden field to contain the data.
-        signatureCapture.val(signaturePad.toDataURL(settings.toDataURL));
+      // Resize the canvas first
+      resizeCanvas();
 
-        // Also set the data-signature value.
-        thisContainer.find('.esign_panel').attr("data-signature", signaturePad.toDataURL(settings.toDataURL));
+      // Restore signature from hidden field if present
+      var savedDataURL = signatureCapture.val();
+      if (savedDataURL && signaturePad.isEmpty()) {
+        try {
+          signaturePad.fromDataURL(savedDataURL);
+        } catch (e) {
+          console.warn('Could not restore signature from storage:', e);
+        }
+      }
+
+      // Save signature on stroke
+      signaturePad.addEventListener("endStroke", function () {
+        var dataURL = signaturePad.toDataURL(settings.toDataURL || 'image/png');
+        signatureCapture.val(dataURL);
+        thisContainer.find('.esign_panel').attr("data-signature", dataURL);
         thisContainer.find('.signature-created').val(Math.ceil(Date.now() / 1000));
-      };
-      signaturePad = new SignaturePad(canvas, settings);
+      });
 
-      // Add the "clear" button.
+      // Add clear functionality
       thisContainer.find('.esign_panel .clear-container').remove();
-      thisContainer.find('.esign_panel').append('<div class="clear-container"><br/><a href="#" class="clear">' + Backdrop.t('Clear Signature') + '</a></div>');
+      thisContainer.find('.esign_panel').append(
+        '<div class="clear-container"><br/><a href="#" class="clear">' + Backdrop.t('Clear Signature') + '</a></div>'
+      );
 
-      // Make the clear button work.
       thisContainer.find('.esign_panel .clear').click(function (e) {
         e.preventDefault();
-        javascript:signaturePad.clear();
-        signatureCapture.val("");
+        signaturePad.clear();
+        signatureCapture.val('');
         thisContainer.find('.esign_panel').attr('data-signature', '');
-        resizeCanvas(canvas, signaturePad, signatureCapture, settings);
+        resizeCanvas();
       });
 
-      // Call the "resize" function for high-DPI screens.
-      resizeCanvas(canvas, signaturePad, signatureCapture, settings);
-
-      $(window).on('orientationchange', function () {
-        resizeCanvas(canvas, signaturePad, signatureCapture, settings);
-      });
+      $(window).on('orientationchange', resizeCanvas);
     });
   }
+
+
 
   function resizeCanvas(canvas, signaturePad, signatureCapture, settings) {
     // When zoomed out to less than 100%, for some very strange reason,
