@@ -1,3 +1,10 @@
+# INTRODUCTION
+This module allows for the integration of a Signature Pad, an electronic signing
+script, into Backdrop CMS for both nodes (content) and the Field API (FAPI).
+
+ * To submit bug reports and feature suggestions, or to track changes:
+    https://github.com/backdrop-contrib/esign/issues
+
 # CONTENTS OF THIS FILE
  * Introduction
  * Requirements
@@ -7,14 +14,6 @@
  * Troubleshooting
  * FAQ
  * Maintainers
-
-# INTRODUCTION
-This module allows for integration of Signature Pad, an electronic-signing
-script, into Backdrop CMS for both nodes (content) and the Field API (FAPI).
-
- * To submit bug reports and feature suggestions, or to track changes:
-    https://github.com/backdrop-contrib/esign/issues
-
 
 # REQUIREMENTS
 It requires the following third-party library:
