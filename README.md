@@ -2,9 +2,6 @@
 This module allows for the integration of a Signature Pad, an electronic signing
 script, into Backdrop CMS for both nodes (content) and the Field API (FAPI).
 
- * To submit bug reports and feature suggestions, or to track changes:
-    https://github.com/backdrop-contrib/esign/issues
-
 # CONTENTS OF THIS FILE
  * Introduction
  * Requirements
@@ -20,42 +17,35 @@ It requires the following third-party library:
 
  * Signature Pad 4.1.7+ https://github.com/szimek/signature_pad Loaded via CDN
 
-
 # RECOMMENDED MODULES
  None
 
 # INSTALLATION
 Install this module using the official Backdrop CMS instructions at https://docs.backdropcms.org/documentation/extend-with-modules
 
-
 # CONFIGURATION
  * For content, you can change the options within the field settings.
    - For FAPI, you can change the field options by setting the '#esign_options'
      parameter, and using the following keys in an associative array:
-
    - dotSize (default: 1)
-
    - minWidth (default: 0.5)
-
    - maxWidth (default: 2.5)
-
    - backgroundColor (default: 'rgba(0,0,0,0)')
-
    - penColor (default: 'rgba(0,0,0,1)')
-
    - velocityFilterWeight (default: 0.7)
 
 # TROUBLESHOOTING
  * If the signature field does not display, check the following:
-
    - Did you set the field to display?
-
    - Does your CSS allow the field to display?
 
 # FAQ
 Q: The signature field isn't working!
-
 A: Please make sure you're using the correct version of Signature Pad.
+
+* To submit bug reports and feature suggestions, or to track changes:
+    https://github.com/backdrop-contrib/esign/issues
+
 
 # Current Maintainer(s):
 - Steve Moorhouse (albanycomputers) https://github.com/albanycomputers
